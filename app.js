@@ -33,24 +33,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialize the application
         initializeCandidates();
         
-        // Add single form submit handler
+        // Add form submit handler with proper button reference
+        const submitButton = voteForm.querySelector('button[type="submit"]');
+        if (!submitButton) throw new Error('Submit button not found');
+        
         voteForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-            const rect = submitButton.getBoundingClientRect();
-            console.log('Form submitted:', JSON.stringify({
-                buttonRect: {
-                    top: Math.round(rect.top),
-                    bottom: Math.round(rect.bottom),
-                    left: Math.round(rect.left),
-                    right: Math.round(rect.right)
-                },
-                target: {
-                    tag: event.target.tagName,
-                    id: event.target.id,
-                    class: event.target.className
-                }
-            }, null, 2));
+            console.log('Form submitted');
             await handleVoteSubmission(event);
+        });
+
+        submitButton.addEventListener('click', () => {
+            console.log('Vote button clicked');
         });
         
         updateResults();
