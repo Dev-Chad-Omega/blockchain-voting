@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Voting System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Blockchain Voting System</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" id="votingTabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="vote-tab" data-bs-toggle="tab" href="#vote" role="tab">Cast Vote</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="results-tab" data-bs-toggle="tab" href="#results" role="tab">Results</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="verify-tab" data-bs-toggle="tab" href="#verify" role="tab">Verify Chain</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content mt-3" id="votingTabsContent">
+                            <!-- Cast Vote Tab -->
+                            <div class="tab-pane fade show active" id="vote" role="tabpanel">
+                                <form id="voteForm" class="needs-validation" novalidate>
+                                    <div class="mb-3">
+                                        <label for="voterId" class="form-label">Voter ID</label>
+                                        <input type="text" class="form-control" id="voterId" required>
+                                        <div class="invalid-feedback">
+                                            Please enter your Voter ID.
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Select Candidate</label>
+                                        <div class="candidates-list">
+                                            <!-- Candidates will be inserted here by JavaScript -->
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Cast Vote</button>
+                                </form>
+                            </div>
+
+                            <!-- Results Tab -->
+                            <div class="tab-pane fade" id="results" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Candidate</th>
+                                                <th>Votes</th>
+                                                <th>Percentage</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="resultsTable">
+                                            <!-- Results will be inserted here by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button class="btn btn-secondary" onclick="updateResults()">Refresh Results</button>
+                            </div>
+
+                            <!-- Verify Chain Tab -->
+                            <div class="tab-pane fade" id="verify" role="tabpanel">
+                                <div class="verification-status p-3 rounded">
+                                    <div id="verificationResult">
+                                        <!-- Verification results will be inserted here by JavaScript -->
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary mt-3" onclick="verifyBlockchain()">Verify Blockchain</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast for notifications -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <!-- Notification message will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none" style="background: rgba(255,255,255,0.8); z-index: 9999;">
+        <div class="position-absolute top-50 start-50 translate-middle text-center">
+            <div class="spinner-border text-primary mb-2" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div id="loadingText" class="text-primary">Processing...</div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // Global error handler
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
+            return false;
+        };
+
+        // Show/hide loading overlay
+        window.showLoading = function(text = 'Processing...') {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('loadingOverlay').classList.remove('d-none');
+        };
+        
+        window.hideLoading = function() {
+            document.getElementById('loadingOverlay').classList.add('d-none');
+        };
+    </script>
+    <script src="blockchain.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
